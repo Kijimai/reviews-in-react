@@ -4,49 +4,55 @@ import { FaChevronLeft, FaChevronRight, FaQuoteRight } from "react-icons/fa"
 
 const Review = () => {
   const [counter, setCounter] = useState(0)
-  const [person, setPerson] = useState({ people })
-  console.log(person)
+  const { name, job, image, text } = people[counter]
 
-  function handleClick(e) {
-    const btnName = e.target.name
-    if (btnName === "prev") {
-      if (counter === 0) {
-        setCounter(people.length - 1)
-      } else {
-        setCounter(counter - 1)
+  function randomReview() {
+    let randomIndex = Math.floor(Math.random() * people.length)
+    setCounter(randomIndex)
+  }
+
+  function prevPerson() {
+    setCounter((counter) => {
+      let newIndex = counter - 1
+      if (newIndex < 0) {
+        return people.length - 1
       }
-    } else if (btnName === "next") {
-      if (counter === people.length) {
-        setCounter(0)
-      } else {
-        setCounter(counter + 1)
+      return newIndex
+    })
+  }
+
+  function nextPerson() {
+    setCounter((counter) => {
+      let newIndex = counter + 1
+      if (newIndex > people.length - 1) {
+        return 0
       }
-    }
+      return newIndex
+    })
   }
 
   return (
-    <article key={people[counter].id} className="review">
+    <article className="review">
       <div className="img-container">
-        <img
-          className="person-img"
-          src={people[counter].image}
-          alt={people[counter].name}
-        />
+        <img className="person-img" src={image} alt={name} />
         <span className="quote-icon">
           <FaQuoteRight />
         </span>
       </div>
-      <h4 className="author">{people[counter].name}</h4>
-      <p className="job">{people[counter].job}</p>
-      <p className="info">{people[counter].text}</p>
+      <h4 className="author">{name}</h4>
+      <p className="job">{job}</p>
+      <p className="info">{text}</p>
       <div className="button-container">
-        <button name="prev" onClick={handleClick} className="prev-btn">
+        <button name="prev" onClick={prevPerson} className="prev-btn">
           <FaChevronLeft />
         </button>
-        <button name="next" onClick={handleClick} className="next-btn">
+        <button name="next" onClick={nextPerson} className="next-btn">
           <FaChevronRight />
         </button>
       </div>
+      <button onClick={randomReview} className="random-btn">
+        Surprise Me!
+      </button>
     </article>
   )
 }
